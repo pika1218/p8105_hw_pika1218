@@ -1,0 +1,70 @@
+---
+title: "p8105_hw2_pika1218"
+author: "pika"
+date: "2/23/2022"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+## Problem 1
+```{r}
+Trash_wheel_df=
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", 
+             sheet = "Mr. Trash Wheel", range = ("A2:N408")) %>% 
+  janitor::clean_names() %>% 
+  select(-dumpster) %>% 
+  mutate(sports_balls = round(sports_balls)) 
+  
+
+```
+
+```{r}
+Precipitation_2018_df=
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", 
+             sheet = "2018 Precipitation", range = ("A2:B15")) %>% 
+  janitor::clean_names() %>% 
+  drop_na(month) %>% 
+  mutate(year = 2018)
+
+Precipitation_2019_df=
+  read_excel("./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx", 
+             sheet = "2019 Precipitation", skip = 1) %>% 
+  janitor::clean_names() %>% 
+  drop_na() %>% 
+  mutate(year = 2019)
+
+combine_df= 
+  bind_rows(Precipitation_2018_df, Precipitation_2019_df) %>% 
+  mutate(month = month.name[as.numeric(month)])
+  
+```
+
+
+## Problem 2
+
+```{r}
+pol_month_df=
+  read_csv("./data/fivethirtyeight_datasets/pols-month.csv") %>% 
+  separate(mon, into = c ("year", "month", "day"), convert = TRUE) %>% 
+  mutate(month = month.name[as.numeric(month)]) %>% 
+  mutate(president = recode(prez_gop, "0" = "dem", "1" = "gop", "2" = "gop")) %>% 
+  select(-prez_dem, -prez_gop, -day)
+  
+
+pol_month_df %>% 
+  group_by(president) %>% 
+  summarize(
+    n_obs = n()
+  )
+
+
+  
+```
+
+
+
+
