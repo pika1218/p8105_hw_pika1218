@@ -8,6 +8,7 @@ output: github_document
 ```{r}
 library(tidyverse)
 library(readxl)
+library(lubridate)
 ```
 
 ## Problem 1
@@ -62,9 +63,18 @@ pol_month_df %>%
   )
 
 
-  
+
 ```
 
 
+```{r}
+snp_df=
+  read.csv("./data/fivethirtyeight_datasets/snp.csv") %>% 
+  mutate(date = mdy(date)) %>% 
+  separate(date, into = c ("year", "month", "day"), convert = TRUE) %>% 
+  arrange(year, month) %>% 
+  mutate(month = month.name[as.numeric(month)])
+  
+```
 
 
