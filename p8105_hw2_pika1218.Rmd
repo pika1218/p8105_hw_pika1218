@@ -78,3 +78,18 @@ snp_df=
 ```
 
 
+```{r}
+unemployment_df=
+  read.csv("./data/fivethirtyeight_datasets/unemployment.csv") %>% 
+  gather(key = month, value = unemployment_df, Jan:Dec) %>% 
+  mutate(month = recode(month, "Jan" = "January", "Feb" = "February" , "Mar" = "March", "Apr" = "April", "May" = "May", "Jun" = "June", "Jul" = "July", "Aug" = "Auguest", "Sep" = "September", "Oct" = "October", "Nov" = "November", "Dec" = "December"))
+```
+
+```{r}
+merging_df1=
+  left_join(pol_month_df, snp_df) 
+
+merging_df2=  
+left_join(merging_df1, unemployment_df)
+```
+
