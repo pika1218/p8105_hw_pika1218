@@ -44,6 +44,8 @@ combine_df=
   
 ```
 
+The dataset of Trash_wheel_df talks about different type of trash removes from the ineer Harbor in Baltimore. This dataset including `r nrow(Trash_wheel_df)` row and `r ncol(Trash_wheel_df)`. The medium number of sports_ball `r mean(pull(Trash_wheel_df, sports_balls), na.rm = TRUE) `
+The total precipition of 2018 is `r sum(pull(Precipitation_2018_df, total), na.rm = TRUE) `
 
 ## Problem 2
 
@@ -95,6 +97,13 @@ left_join(merging_df1, unemployment_df)
 str(merging_df2)
 ```
 
+The dataset pol_month_df talks about which party is the president from the year of 1947 to the year of 2015 on each month. It also talks about the distribition of parties in the governors and senators. This dataset has `r nrow(pol_month_df)` row and `r ncol(pol_month_df)`. 
+
+The dataset snp_df has `r nrow(snp_df)` row and `r ncol(snp_df)`.
+
+The dataset unemployment_df `r nrow(unemployment_df)` row and `r ncol(unemployment_df)`. The mean numbet of unemplyment `r mean(pull(unemployment_df, unemployment_df), na.rm = TRUE)`
+
+The dataset merging_df2 makes a conclusion for all of the data. It has `r nrow(merging_df2)` row and `r ncol(merging_df2)`. 
 
 ##Problem 3
 
@@ -109,14 +118,39 @@ babynames =
   select(-child_s_first_name) %>% 
   mutate(
     ethnicity = recode(ethnicity, "Asian and paci" = "Asian and pacific islander", "Black non hisp" = "Black non hispanic" , "White non hisp" = "White non hispanic")
-    )
+    ) %>% 
+  distinct()
+  
+```
 
 
+```{r}
+female_baby_names=
+  babynames %>% 
+  filter(childs_first_name == "Olivia") %>% 
+  select(year_of_birth, ethnicity, rank) %>% 
+  pivot_wider(
+    names_from = "year_of_birth",
+    values_from = "rank"
+  )
+```
+
+```{r}
+male_baby_names=
+  babynames %>% 
+  filter(gender == "MALE", rank =="1") %>% 
+  select(year_of_birth, ethnicity, childs_first_name) %>% 
+  pivot_wider(
+    names_from = "year_of_birth",
+    values_from = "childs_first_name")
+  
+```
 
 
-
-
-
-
+```{r}
+male_baby_plot=
+  babynames %>% 
+  filter(gender == "MALE", ethnicity == "White non hispanic", year_of_birth =="2016") %>% 
+  ggplot(aes(x = rank, y = count)) + geom_point()
 ```
 
